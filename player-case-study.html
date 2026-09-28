@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Randam's Player — Product Design Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-base: #070908;
+      --bg-surface: #0c100e;
+      --bg-card: #111713;
+      --green-accent: #21d251;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-hover: rgba(33, 210, 81, 0.3);
+      --text-main: #f0f4f2;
+      --text-muted: #85968d;
+      --text-dim: #4a5750;
+      --radius-sm: 6px;
+      --radius-md: 0px;
+      --radius-lg: 18px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg-base); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* CONTAINER: Standard 960px width prevents image stretching */
+    .page-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 20px 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 100px;
+    }
+
+    /* TYPOGRAPHY */
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--green-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .main-title {
+      font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .main-title span { color: var(--green-accent); }
+
+    .lead-text {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 760px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .meta-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pill-accent {
+      background: rgba(33, 210, 81, 0.08);
+      border-color: rgba(33, 210, 81, 0.25);
+      color: var(--green-accent);
+      font-weight: 600;
+    }
+
+    /* SECTION HEADERS */
+    .story-header {
+      margin-bottom: 28px;
+    }
+
+    .story-header h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-top: 4px;
+    }
+
+    .story-header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-top: 6px;
+    }
+
+    /* STATEMENT CARD */
+    .statement-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--green-accent);
+      padding: 32px 36px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.5);
+    }
+
+    .statement-card p {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: #dce4e0;
+      line-height: 1.65;
+    }
+
+    .feature-grid-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .feature-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 26px;
+    }
+
+    .feature-box h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green-accent);
+      margin-bottom: 12px;
+    }
+
+    .feature-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feature-box ul li {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      position: relative;
+      padding-left: 16px;
+    }
+
+    .feature-box ul li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: var(--green-accent);
+      font-weight: bold;
+    }
+
+    /* PENPOT SHOWCASE STACK (NO STRETCHING, NO PIXELATION) */
+    .penpot-showcase-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .penpot-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.6);
+      transition: border-color 0.2s ease;
+    }
+
+    .penpot-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .penpot-card-header {
+      padding: 16px 20px;
+      background: #0f1411;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .penpot-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .penpot-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--green-accent);
+      background: rgba(33, 210, 81, 0.08);
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(33, 210, 81, 0.2);
+    }
+
+    /* THE FIX: Preserves natural resolution without forced stretching */
+    .penpot-img-stage {
+      width: 100%;
+      background: #141715;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .penpot-img-stage img {
+      max-width: 100%;
+      width: auto;
+      max-height: 480px;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    .penpot-card-desc {
+      padding: 16px 20px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+    }
+
+    /* EVOLUTION BEFORE VS AFTER */
+    .evolution-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .evolution-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.6);
+    }
+
+    .evolution-header {
+      padding: 16px 20px;
+      background: #0f1411;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .evolution-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .tag-state {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .tag-v1 { background: rgba(255, 255, 255, 0.08); color: #bbb; }
+    .tag-v2 { background: rgba(33, 210, 81, 0.12); color: var(--green-accent); border: 1px solid rgba(33, 210, 81, 0.25); }
+
+    .evolution-img-stage {
+      width: 100%;
+      background: #090c0a;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .evolution-img-stage img {
+      max-width: 100%;
+      width: auto;
+      max-height: 480px;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .evolution-desc {
+      padding: 16px 20px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* PALETTE */
+    .palette-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .palette-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chip {
+      width: 100%;
+      height: 32px;
+      border-radius: 4px;
+    }
+
+    .chip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* MOBILE ADAPTATION GRID */
+    .mobile-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .mobile-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.6);
+    }
+
+    .mobile-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .mobile-card-label {
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      border-top: 1px solid var(--border-subtle);
+      background: #0f1411;
+    }
+
+    /* FOOTER */
+    .case-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .btn-contact {
+      background: var(--green-accent);
+      color: #060907;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 768px) {
+      .feature-grid-two { grid-template-columns: 1fr; }
+      .mobile-grid { grid-template-columns: repeat(2, 1fr); }
+      .page-wrapper { gap: 70px; padding-top: 50px; }
+      .main-title { font-size: 2.1rem; }
+      .penpot-img-stage, .evolution-img-stage { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- HERO SECTION -->
+    <header>
+      <span class="eyebrow">Product Design Case Study</span>
+      <h1 class="main-title">
+        Randam's <span>Player</span>
+      </h1>
+      <p class="lead-text">
+        A music player, built to replace cluttered streaming web apps. Designed in Penpot. Offline-first, with drag-and-drop queue reordering and dense multi-select actions, adaptable from desktop down to mobile.
+      </p>
+
+      <div class="meta-pills-row">
+        <span class="pill pill-accent">Role: Product &amp; Systems Designer</span>
+        <span class="pill">Tool: Penpot</span>
+        <span class="pill">Output: System Architecture &amp; Production UI</span>
+        <span class="pill">Platform: Responsive (Desktop &amp; Mobile)</span>
+      </div>
+    </header>
+
+    <!-- CONTEXT -->
+    <section>
+      <div class="story-header">
+        <span class="eyebrow">Context</span>
+        <h2>Why Rebuild the Music Player?</h2>
+        <p>
+          Mainstream streaming apps bury queue management in menus and push algorithmic recommendations. The goal here was a library-first interface: fast, and built around direct queue control.
+        </p>
+      </div>
+
+      <div class="statement-card">
+        <p>
+          "The design goal: give listeners direct control. Queue reordering, multi-track batch downloads, and local storage — no login required, no memory bloat."
+        </p>
+      </div>
+
+      <div class="feature-grid-two">
+        <div class="feature-box">
+          <h4>Queue Reordering &amp; Feedback</h4>
+          <ul>
+            <li>Native drag-and-drop live queue reordering</li>
+            <li>Real-time remaining time and duration estimation</li>
+            <li>Animated equalizer indicator on the active track</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h4>Batch Actions &amp; High Density</h4>
+          <ul>
+            <li>Integrated checkbox selection matrix across card grids and lists</li>
+            <li>One-click batch queue addition and sequential downloads</li>
+            <li>Local-first playlists stored purely in client-side LocalStorage</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 01: PENPOT SYSTEM ARCHITECTURE -->
+    <section>
+      <div class="story-header">
+        <span class="eyebrow">Phase 01 — Penpot System Architecture</span>
+        <h2>Workspace Boards &amp; Component Hierarchies</h2>
+        <p>
+          Each core view was structured inside Penpot to validate component tokens, auto-layout groups, and information density before implementation.
+        </p>
+      </div>
+
+      <div class="penpot-showcase-stack">
+
+        <!-- Board 01 -->
+        <div class="penpot-card">
+          <div class="penpot-card-header">
+            <div class="penpot-card-title">Discover View &amp; Spotlight Hub</div>
+            <span class="penpot-tag">Penpot Board 01</span>
+          </div>
+          <div class="penpot-img-stage">
+            <img src="penpot_discover.png" alt="Discover View Canvas in Penpot">
+          </div>
+          <div class="penpot-card-desc">
+            Sets up the main landing view: a hero spotlight card, a responsive section for browsing track variants, and a global search bar.
+          </div>
+        </div>
+
+        <!-- Board 02 -->
+        <div class="penpot-card">
+          <div class="penpot-card-header">
+            <div class="penpot-card-title">Dense Grid &amp; Multi-Select Matrix</div>
+            <span class="penpot-tag">Penpot Board 02</span>
+          </div>
+          <div class="penpot-img-stage">
+            <img src="penpot_favorites.png" alt="Favorites Multi-Select Matrix in Penpot">
+          </div>
+          <div class="penpot-card-desc">
+            Testing the 5-column responsive card matrix with checkboxes for bulk actions: sequential downloads and batch playlist additions.
+          </div>
+        </div>
+
+        <!-- Board 03 -->
+        <div class="penpot-card">
+          <div class="penpot-card-header">
+            <div class="penpot-card-title">Playlist Vault &amp; Edit Modal Architecture</div>
+            <span class="penpot-tag">Penpot Board 03</span>
+          </div>
+          <div class="penpot-img-stage">
+            <img src="penpot_playlists.png" alt="Playlist Vault and Modal in Penpot">
+          </div>
+          <div class="penpot-card-desc">
+            Local collection management: playlist cards with play overlays, plus a floating modal for reordering and removing tracks.
+          </div>
+        </div>
+
+        <!-- Board 04 -->
+        <div class="penpot-card">
+          <div class="penpot-card-header">
+            <div class="penpot-card-title">Queue Monitor &amp; Drag Interaction States</div>
+            <span class="penpot-tag">Penpot Board 04</span>
+          </div>
+          <div class="penpot-img-stage">
+            <img src="penpot_queue.png" alt="Queue Monitor in Penpot">
+          </div>
+          <div class="penpot-card-desc">
+            The dedicated "Up Next" queue: active-track borders, an equalizer indicator, and grab handles for drag-and-drop reordering.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PHASE 02: EVOLUTION BEFORE VS AFTER -->
+    <section>
+      <div class="story-header">
+        <span class="eyebrow">Phase 02 — Design Evolution</span>
+        <h2>Refining Information Density (V1 vs V2)</h2>
+        <p>
+          Early iterations had visual friction. Comparing the original table layout to the card grid shows why it changed.
+        </p>
+      </div>
+
+      <div class="evolution-stack">
+
+        <!-- Favorites Comparison -->
+        <div class="evolution-card">
+          <div class="evolution-header">
+            <div class="evolution-title">Favorites View: Layout Transition</div>
+            <span class="tag-state tag-v1">Version 1 — Compressed Table</span>
+          </div>
+          <div class="evolution-img-stage">
+            <img src="player_favorites_old.png" alt="Favorites Early Table Layout">
+          </div>
+          <div class="evolution-desc">
+            <strong>The Limitation:</strong> The compressed row format packed secondary actions into every row. This hurt title readability and hid the artwork.
+          </div>
+        </div>
+
+        <div class="evolution-card">
+          <div class="evolution-header">
+            <div class="evolution-title">Favorites View: Layout Transition</div>
+            <span class="tag-state tag-v2">Version 2 — Visual Card Matrix</span>
+          </div>
+          <div class="evolution-img-stage">
+            <img src="player_favorites_new.png" alt="Favorites Final Card Grid">
+          </div>
+          <div class="evolution-desc">
+            <strong>The Solution:</strong> Switched to a card grid with larger artwork tiles, dedicated checkbox targets, and simpler hover interactions for faster browsing.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PHASE 03: MOBILE ADAPTATION -->
+    <section>
+      <div class="story-header">
+        <span class="eyebrow">Phase 03 — Mobile Adaptation</span>
+        <h2>Same System, Smaller Screen</h2>
+        <p>
+          The same queue logic, multi-select, and local storage carry over to a single-column mobile layout, with the bottom dock reflowing into the mobile tab bar.
+        </p>
+      </div>
+
+      <div class="mobile-grid">
+        <div class="mobile-card">
+          <img src="player_mobile_nowplaying.png" alt="Now Playing Screen on Mobile">
+          <div class="mobile-card-label">Now Playing</div>
+        </div>
+        <div class="mobile-card">
+          <img src="player_mobile_queue.png" alt="Queue Monitor Screen on Mobile">
+          <div class="mobile-card-label">Queue Monitor</div>
+        </div>
+        <div class="mobile-card">
+          <img src="player_mobile_discover.png" alt="Discover Screen with Multi-Select on Mobile">
+          <div class="mobile-card-label">Discover &amp; Multi-Select</div>
+        </div>
+        <div class="mobile-card">
+          <img src="player_mobile_playlists.png" alt="Playlists Screen on Mobile">
+          <div class="mobile-card-label">Playlists</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESIGN TOKENS -->
+    <section>
+      <div class="story-header">
+        <span class="eyebrow">Design Tokens</span>
+        <h2>Dark Base &amp; Green Accents</h2>
+        <p>
+          A dark base reduces eye strain during long listening sessions. Green indicators mark the actionable controls.
+        </p>
+      </div>
+
+      <div class="palette-strip">
+        <div class="palette-card">
+          <div class="chip" style="background: #070908; border: 1px solid #222;"></div>
+          <span class="chip-label">#070908</span>
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Background Base</span>
+        </div>
+        <div class="palette-card">
+          <div class="chip" style="background: #0c100e; border: 1px solid #222;"></div>
+          <span class="chip-label">#0C100E</span>
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Surface Layer</span>
+        </div>
+        <div class="palette-card">
+          <div class="chip" style="background: #111713; border: 1px solid #222;"></div>
+          <span class="chip-label">#111713</span>
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Card Surface</span>
+        </div>
+        <div class="palette-card">
+          <div class="chip" style="background: #17682d;"></div>
+          <span class="chip-label">#17682D</span>
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Subtle Border</span>
+        </div>
+        <div class="palette-card">
+          <div class="chip" style="background: #21d251;"></div>
+          <span class="chip-label">#21D251</span>
+          <span style="font-size: 0.72rem; color: var(--text-dim);">Action Accent</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="case-footer">
+      <div>
+        <strong>Randam's Player</strong> — Designed and Developed by Yousif Badr
+        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">Product Design Case Study</div>
+      </div>
+      <a href="https://randam.yousifbadr.workers.dev/" class="btn-contact">Back to the main show?</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>
