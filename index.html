@@ -1139,6 +1139,158 @@
     justify-content: center;
   }
 }
+
+    /* ==========================================================================
+       WORK SECTION — MOBILE FIXES (info pills, project cards, action box)
+       Scoped to phone widths only; desktop/tablet layout is unchanged.
+       ========================================================================== */
+    @media (max-width: 560px) {
+      /* Section header: let the tagline drop under the title instead of squeezing */
+      .section-headline-bar {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 0.4rem 1rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .project-card {
+        margin-bottom: 2.25rem;
+      }
+
+      /* Card header: tighter padding, allow grid children to shrink */
+      .project-hub-header {
+        padding: 1.15rem 1rem;
+        gap: 1rem;
+      }
+
+      .project-hub-info,
+      .project-hub-actionbox {
+        min-width: 0;
+      }
+
+      .project-hub-info h3 {
+        font-size: 1.2rem;
+        overflow-wrap: anywhere;
+      }
+
+      .project-hub-info p {
+        font-size: 0.88rem;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Info pills: wrap onto multiple rows instead of clipping in a hidden scroller */
+      .badge-stack-single-row {
+        flex-wrap: wrap;
+        overflow: visible;
+        gap: 6px;
+      }
+
+      .badge {
+        font-size: 0.64rem;
+        padding: 0.32rem 0.55rem;
+        white-space: normal;
+        flex-shrink: 1;
+        max-width: 100%;
+      }
+
+      /* Action box: stack label + button, full-width tap target */
+      .project-hub-actionbox {
+        padding: 1rem;
+        gap: 0.75rem;
+      }
+
+      .actionbox-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+
+      .actionbox-top .btn-launch-live {
+        align-self: stretch;
+        justify-content: center;
+        padding: 0.65rem 1rem;
+      }
+
+      /* PIN / key chips: two per row, the last one stretches full width */
+      .quick-chips-row {
+        gap: 6px;
+      }
+
+      .copy-chip {
+        flex: 1 1 calc(50% - 3px);
+        padding: 0.55rem 0.5rem;
+        font-size: 0.74rem;
+      }
+
+      /* Card body */
+      .project-body-pad {
+        padding: 1.1rem 1rem;
+      }
+
+      .technical-columns {
+        gap: 0.85rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .tech-col {
+        padding: 1rem;
+      }
+
+      .tech-col-title {
+        font-size: 0.95rem;
+      }
+
+      .tech-col-desc {
+        font-size: 0.86rem;
+      }
+
+      /* OneBit dossier */
+      .rtl-specimen-dossier {
+        padding: 1rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .dossier-grid {
+        gap: 0.85rem;
+      }
+
+      .dossier-cell {
+        padding: 1rem;
+      }
+
+      .dossier-text-display {
+        font-size: 1.05rem;
+        padding: 0.75rem;
+        overflow-wrap: anywhere;
+      }
+
+      .dossier-text-display.broken {
+        letter-spacing: 0.18em;
+      }
+
+      /* Galleries: single flexible column, never wider than the card */
+      .gallery-quad-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .mobile-quad-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .unit-tag {
+        padding: 0.55rem 0.6rem;
+        font-size: 0.68rem;
+      }
+    }
+
+    /* Very narrow phones: one chip per row so PINs never get cramped */
+    @media (max-width: 360px) {
+      .copy-chip {
+        flex-basis: 100%;
+      }
+    }
   </style>
 </head>
 <body>
